@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+*{font-family: 'Raleway', sans-serif;}
+
+.page-heading {
+    font-size: 24px;
+}

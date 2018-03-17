@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+*{font-family: 'Raleway', sans-serif;}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.header-container {
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 25px;
+    text-align: center;
+}
+
+.btn {
+    font-size: 14px;
+    color: #000;
+    padding: 12px 25px;
+    text-align: center;
+}
+
+.btn-remove{
+    background: #ccc;
+    border: 1px solid #666;
+}
+
+.btn-add {
+    background: green;
+    border: 1px solid rgb(1, 83, 1);
+}
+
+.page-heading {
+    font-size: 24px;
+}
+
+.action {
+    padding: 25px 0 0 0;
+}
+
+.counter {
+    padding:25px 0 0 0;
+}
+
+.count-title {
+    font-size: 18px;
+    color: #333;
+    padding: 12px 0;
+}
+
+.counter-btn {
+    font-size: 15px;
+    padding: 5px 12px;
+}
+
+.toggle-container {
+    padding: 25px 0 0 0;
+}

@@ -25,11 +25,13 @@ var IndecisionApp = function (_React$Component) {
             var AppOptions = ["India", "UK", "USA"];
             return React.createElement(
                 "div",
-                null,
+                { className: 'wrapper' },
                 React.createElement(Header, { title: AppTitle, subTitle: subTitle }),
                 React.createElement(Action, null),
                 React.createElement(Options, { options: AppOptions }),
-                React.createElement(AddOptions, null)
+                React.createElement(AddOptions, null),
+                React.createElement(Counter, null),
+                React.createElement(VisibilityToggle, null)
             );
         }
     }]);
@@ -51,7 +53,7 @@ var Header = function (_React$Component2) {
         value: function render() {
             return React.createElement(
                 "div",
-                null,
+                { className: 'header-container' },
                 React.createElement(
                     "h1",
                     null,
@@ -72,22 +74,35 @@ var Header = function (_React$Component2) {
 var Action = function (_React$Component3) {
     _inherits(Action, _React$Component3);
 
-    function Action() {
+    function Action(props) {
         _classCallCheck(this, Action);
 
-        return _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).apply(this, arguments));
+        var _this3 = _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).call(this, props));
+
+        _this3.handleRemoveAll = _this3.handleRemoveAll.bind(_this3);
+        return _this3;
     }
 
     _createClass(Action, [{
+        key: "handleRemoveAll",
+        value: function handleRemoveAll() {
+            console.log(this.props.options);
+        }
+    }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "div",
-                null,
+                { className: 'action' },
+                React.createElement(
+                    "span",
+                    { className: 'text1' },
+                    "What should I do?"
+                ),
                 React.createElement(
                     "button",
-                    null,
-                    "What should I do?"
+                    { className: 'btn btn-remove', onClick: this.handleRemoveAll },
+                    "Remove"
                 )
             );
         }
@@ -171,6 +186,150 @@ var AddOptions = function (_React$Component6) {
     }]);
 
     return AddOptions;
+}(React.Component);
+
+var Counter = function (_React$Component7) {
+    _inherits(Counter, _React$Component7);
+
+    function Counter(props) {
+        _classCallCheck(this, Counter);
+
+        var _this7 = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
+
+        _this7.handleAddOne = _this7.handleAddOne.bind(_this7);
+        _this7.handleMinusOne = _this7.handleMinusOne.bind(_this7);
+        _this7.handleReset = _this7.handleReset.bind(_this7);
+
+        _this7.state = {
+            count: 0
+        };
+
+        return _this7;
+    }
+
+    _createClass(Counter, [{
+        key: "handleAddOne",
+        value: function handleAddOne() {
+            console.log('handleAddOne');
+            this.setState(function (prevState) {
+                return {
+                    count: prevState.count + 1
+                };
+            });
+        }
+    }, {
+        key: "handleMinusOne",
+        value: function handleMinusOne() {
+            console.log('handleMinusOne');
+            this.setState(function (prevState) {
+                return {
+                    count: prevState.count - 1
+                };
+            });
+        }
+    }, {
+        key: "handleReset",
+        value: function handleReset() {
+            console.log('handleReset');
+            this.setState(function (prevState) {
+                return {
+                    count: 0
+                };
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: 'counter' },
+                React.createElement(
+                    "div",
+                    { className: 'count-title' },
+                    "Count : ",
+                    this.state.count
+                ),
+                React.createElement(
+                    "button",
+                    { className: 'counter-btn', onClick: this.handleAddOne },
+                    "+1"
+                ),
+                React.createElement(
+                    "button",
+                    { className: 'counter-btn', onClick: this.handleMinusOne },
+                    "-1"
+                ),
+                React.createElement(
+                    "button",
+                    { className: 'counter-btn', onClick: this.handleReset },
+                    "Reset"
+                )
+            );
+        }
+    }]);
+
+    return Counter;
+}(React.Component);
+
+var VisibilityToggle = function (_React$Component8) {
+    _inherits(VisibilityToggle, _React$Component8);
+
+    function VisibilityToggle(props) {
+        _classCallCheck(this, VisibilityToggle);
+
+        var _this8 = _possibleConstructorReturn(this, (VisibilityToggle.__proto__ || Object.getPrototypeOf(VisibilityToggle)).call(this, props));
+
+        _this8.handleToggleVisibility = _this8.handleToggleVisibility.bind(_this8);
+
+        _this8.state = {
+            visibility: false
+        };
+        return _this8;
+    }
+
+    _createClass(VisibilityToggle, [{
+        key: "handleToggleVisibility",
+        value: function handleToggleVisibility() {
+            var _this9 = this;
+
+            console.log('test');
+            this.setState(function () {
+                return {
+                    visibility: !_this9.state.visibility
+                };
+            });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+
+            return React.createElement(
+                "div",
+                { className: 'toggle-container' },
+                React.createElement(
+                    "div",
+                    null,
+                    "Visibility Toggle"
+                ),
+                React.createElement(
+                    "button",
+                    { className: 'toggle-btn', onClick: this.handleToggleVisibility },
+                    this.state.visibility ? 'Hide details' : 'Show details'
+                ),
+                this.state.visibility && React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "p",
+                        null,
+                        "Hey, these are some details you can now see!!"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return VisibilityToggle;
 }(React.Component);
 
 var app = document.getElementById('app');

@@ -1,17 +1,44 @@
-
-
 class IndecisionApp extends React.Component {
+    constructor(props) {
+        super(props)
+        this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
+        this.handleAddOption = this.handleAddOption.bind(this)
+        this.state = {
+            Coption : []
+        }
+    }
+
+    handleDeleteOptions() {
+        this.setState(()=>{
+            return {
+                Coption: []
+            }
+        })
+    }
+
+    handleAddOption(option) {
+        if(!option) {
+            return <span className={'error'}>Enter valid value to add item</span>
+        }
+        else if (this.state.Coption.indexOf(option) > -1) {
+            return <span className={'msg-green'}>This option already exists</span>
+        }
+        this.setState((prevState)=>{
+            return {
+                Coption: prevState.Coption.concat(option)
+            }
+        })
+    }
+
     render() {
-        const AppTitle = "Indecision App"
-        const subTitle = "Put your life in the hand of a computer"
-        const AppOptions = ["India", "UK", "USA"]
+        const AppTitle = "Indecision App";
+        const subTitle = "React Application";
         return (
             <div className={'wrapper'}>
                 <Header title={AppTitle} subTitle={subTitle} />
-                <Action />
-                <Options options={AppOptions} />
-                <AddOptions />
-
+                <Action hasOptions={this.state.Coption.length>0} handleDeleteOptions={this.handleDeleteOptions} />
+                <Options options={this.state.Coption} />
+                <AddOptions handleAddOption={this.handleAddOption} />
                 <Counter />
                 <VisibilityToggle />
             </div>
@@ -37,15 +64,14 @@ class Action extends React.Component {
     }
 
     handleRemoveAll() {
-        console.log(this.props.options)
+        console.log(this.props.hasOptions)
     }
 
     render() {
         return (
             <div className={'action'}>
                 <span className={'text1'}>What should I do?</span>
-                <button className={'btn btn-remove'} onClick={this.handleRemoveAll}>Remove</button>
-
+                <button className={'btn btn-remove'} disabled={!this.props.hasOptions} onClick={this.props.handleDeleteOptions}>Remove</button>
             </div>
         )
     }
@@ -53,6 +79,7 @@ class Action extends React.Component {
 
 class Options extends React.Component {
     render() {
+        console.log(this.props.options,'test')
         return (
             <ol>
                 {
@@ -69,18 +96,42 @@ class Option extends React.Component {
     render () {
         return (
             <li>
-                Options: {this.props.optionText}
+                Option: {this.props.optionText}
             </li>
         )
     }
 }
 
 class AddOptions extends React.Component {
+    constructor(props) {
+        super(props)
+        this.handleAddOption = this.handleAddOption.bind(this)
+        this.state = {
+            error: undefined
+        }
+    }
+
+    handleAddOption(e) {
+        e.preventDefault()
+        const option = e.target.elements.option.value.trim()
+        const error = this.props.handleAddOption(option)
+        this.setState(()=> {
+            return {error}
+        })
+        e.target.elements.option.value = ''
+        // if(option) {
+        //     this.props.handleAddOption(option)
+        // }
+    }
+
     render() {
         return (
             <div>
-                <input type="text" name="option" />
-                <button>Add Option</button>
+                {this.state.error && <p>{this.state.error}</p>}
+                <form onSubmit={this.handleAddOption}>
+                    <input type="text" name="option" />
+                    <button>Add Option</button>
+                </form>
             </div>
         )
     }
@@ -96,7 +147,6 @@ class Counter extends React.Component {
         this.state = {
             count: 0
         }
-
     }
 
     handleAddOne () {
@@ -127,9 +177,10 @@ class Counter extends React.Component {
     }
 
     render () {
+        const currentCount = this.state.count
         return (
             <div className={'counter'}>
-                <div className={'count-title'}>Count : {this.state.count}</div>
+                <div className={'count-title'}>Count : {currentCount}</div>
                 <button className={'counter-btn'} onClick={this.handleAddOne}>+1</button>
                 <button className={'counter-btn'} onClick={this.handleMinusOne}>-1</button>
                 <button className={'counter-btn'} onClick={this.handleReset}>Reset</button>
@@ -149,16 +200,14 @@ class VisibilityToggle extends React.Component {
     }
     
     handleToggleVisibility() {
-        console.log('test')
         this.setState (()=> {
-            return {
+            return {                
                 visibility : !this.state.visibility
             }
         })
     }
 
     render () {
-
         return (
             <div className={'toggle-container'}>
                 <div>Visibility Toggle</div>

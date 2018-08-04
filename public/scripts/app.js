@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -11,25 +11,62 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var IndecisionApp = function (_React$Component) {
     _inherits(IndecisionApp, _React$Component);
 
-    function IndecisionApp() {
+    function IndecisionApp(props) {
         _classCallCheck(this, IndecisionApp);
 
-        return _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
+
+        _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
+        _this.handleAddOption = _this.handleAddOption.bind(_this);
+        _this.state = {
+            Coption: []
+        };
+        return _this;
     }
 
     _createClass(IndecisionApp, [{
-        key: "render",
+        key: 'handleDeleteOptions',
+        value: function handleDeleteOptions() {
+            this.setState(function () {
+                return {
+                    Coption: []
+                };
+            });
+        }
+    }, {
+        key: 'handleAddOption',
+        value: function handleAddOption(option) {
+            if (!option) {
+                return React.createElement(
+                    'span',
+                    { className: 'error' },
+                    'Enter valid value to add item'
+                );
+            } else if (this.state.Coption.indexOf(option) > -1) {
+                return React.createElement(
+                    'span',
+                    { className: 'msg-green' },
+                    'This option already exists'
+                );
+            }
+            this.setState(function (prevState) {
+                return {
+                    Coption: prevState.Coption.concat(option)
+                };
+            });
+        }
+    }, {
+        key: 'render',
         value: function render() {
             var AppTitle = "Indecision App";
-            var subTitle = "Put your life in the hand of a computer";
-            var AppOptions = ["India", "UK", "USA"];
+            var subTitle = "React Application";
             return React.createElement(
-                "div",
+                'div',
                 { className: 'wrapper' },
                 React.createElement(Header, { title: AppTitle, subTitle: subTitle }),
-                React.createElement(Action, null),
-                React.createElement(Options, { options: AppOptions }),
-                React.createElement(AddOptions, null),
+                React.createElement(Action, { hasOptions: this.state.Coption.length > 0, handleDeleteOptions: this.handleDeleteOptions }),
+                React.createElement(Options, { options: this.state.Coption }),
+                React.createElement(AddOptions, { handleAddOption: this.handleAddOption }),
                 React.createElement(Counter, null),
                 React.createElement(VisibilityToggle, null)
             );
@@ -49,18 +86,18 @@ var Header = function (_React$Component2) {
     }
 
     _createClass(Header, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 { className: 'header-container' },
                 React.createElement(
-                    "h1",
+                    'h1',
                     null,
                     this.props.title
                 ),
                 React.createElement(
-                    "h2",
+                    'h2',
                     null,
                     this.props.subTitle
                 )
@@ -84,25 +121,25 @@ var Action = function (_React$Component3) {
     }
 
     _createClass(Action, [{
-        key: "handleRemoveAll",
+        key: 'handleRemoveAll',
         value: function handleRemoveAll() {
-            console.log(this.props.options);
+            console.log(this.props.hasOptions);
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 { className: 'action' },
                 React.createElement(
-                    "span",
+                    'span',
                     { className: 'text1' },
-                    "What should I do?"
+                    'What should I do?'
                 ),
                 React.createElement(
-                    "button",
-                    { className: 'btn btn-remove', onClick: this.handleRemoveAll },
-                    "Remove"
+                    'button',
+                    { className: 'btn btn-remove', disabled: !this.props.hasOptions, onClick: this.props.handleDeleteOptions },
+                    'Remove'
                 )
             );
         }
@@ -121,10 +158,11 @@ var Options = function (_React$Component4) {
     }
 
     _createClass(Options, [{
-        key: "render",
+        key: 'render',
         value: function render() {
+            console.log(this.props.options, 'test');
             return React.createElement(
-                "ol",
+                'ol',
                 null,
                 this.props.options.map(function (option) {
                     return React.createElement(Option, { key: option, optionText: option });
@@ -146,12 +184,12 @@ var Option = function (_React$Component5) {
     }
 
     _createClass(Option, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "li",
+                'li',
                 null,
-                "Options: ",
+                'Option: ',
                 this.props.optionText
             );
         }
@@ -163,23 +201,52 @@ var Option = function (_React$Component5) {
 var AddOptions = function (_React$Component6) {
     _inherits(AddOptions, _React$Component6);
 
-    function AddOptions() {
+    function AddOptions(props) {
         _classCallCheck(this, AddOptions);
 
-        return _possibleConstructorReturn(this, (AddOptions.__proto__ || Object.getPrototypeOf(AddOptions)).apply(this, arguments));
+        var _this6 = _possibleConstructorReturn(this, (AddOptions.__proto__ || Object.getPrototypeOf(AddOptions)).call(this, props));
+
+        _this6.handleAddOption = _this6.handleAddOption.bind(_this6);
+        _this6.state = {
+            error: undefined
+        };
+        return _this6;
     }
 
     _createClass(AddOptions, [{
-        key: "render",
+        key: 'handleAddOption',
+        value: function handleAddOption(e) {
+            e.preventDefault();
+            var option = e.target.elements.option.value.trim();
+            var error = this.props.handleAddOption(option);
+            this.setState(function () {
+                return { error: error };
+            });
+            e.target.elements.option.value = '';
+            // if(option) {
+            //     this.props.handleAddOption(option)
+            // }
+        }
+    }, {
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 null,
-                React.createElement("input", { type: "text", name: "option" }),
-                React.createElement(
-                    "button",
+                this.state.error && React.createElement(
+                    'p',
                     null,
-                    "Add Option"
+                    this.state.error
+                ),
+                React.createElement(
+                    'form',
+                    { onSubmit: this.handleAddOption },
+                    React.createElement('input', { type: 'text', name: 'option' }),
+                    React.createElement(
+                        'button',
+                        null,
+                        'Add Option'
+                    )
                 )
             );
         }
@@ -203,12 +270,11 @@ var Counter = function (_React$Component7) {
         _this7.state = {
             count: 0
         };
-
         return _this7;
     }
 
     _createClass(Counter, [{
-        key: "handleAddOne",
+        key: 'handleAddOne',
         value: function handleAddOne() {
             console.log('handleAddOne');
             this.setState(function (prevState) {
@@ -218,7 +284,7 @@ var Counter = function (_React$Component7) {
             });
         }
     }, {
-        key: "handleMinusOne",
+        key: 'handleMinusOne',
         value: function handleMinusOne() {
             console.log('handleMinusOne');
             this.setState(function (prevState) {
@@ -228,7 +294,7 @@ var Counter = function (_React$Component7) {
             });
         }
     }, {
-        key: "handleReset",
+        key: 'handleReset',
         value: function handleReset() {
             console.log('handleReset');
             this.setState(function (prevState) {
@@ -238,31 +304,32 @@ var Counter = function (_React$Component7) {
             });
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
+            var currentCount = this.state.count;
             return React.createElement(
-                "div",
+                'div',
                 { className: 'counter' },
                 React.createElement(
-                    "div",
+                    'div',
                     { className: 'count-title' },
-                    "Count : ",
-                    this.state.count
+                    'Count : ',
+                    currentCount
                 ),
                 React.createElement(
-                    "button",
+                    'button',
                     { className: 'counter-btn', onClick: this.handleAddOne },
-                    "+1"
+                    '+1'
                 ),
                 React.createElement(
-                    "button",
+                    'button',
                     { className: 'counter-btn', onClick: this.handleMinusOne },
-                    "-1"
+                    '-1'
                 ),
                 React.createElement(
-                    "button",
+                    'button',
                     { className: 'counter-btn', onClick: this.handleReset },
-                    "Reset"
+                    'Reset'
                 )
             );
         }
@@ -288,11 +355,10 @@ var VisibilityToggle = function (_React$Component8) {
     }
 
     _createClass(VisibilityToggle, [{
-        key: "handleToggleVisibility",
+        key: 'handleToggleVisibility',
         value: function handleToggleVisibility() {
             var _this9 = this;
 
-            console.log('test');
             this.setState(function () {
                 return {
                     visibility: !_this9.state.visibility
@@ -300,29 +366,28 @@ var VisibilityToggle = function (_React$Component8) {
             });
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
-
             return React.createElement(
-                "div",
+                'div',
                 { className: 'toggle-container' },
                 React.createElement(
-                    "div",
+                    'div',
                     null,
-                    "Visibility Toggle"
+                    'Visibility Toggle'
                 ),
                 React.createElement(
-                    "button",
+                    'button',
                     { className: 'toggle-btn', onClick: this.handleToggleVisibility },
                     this.state.visibility ? 'Hide details' : 'Show details'
                 ),
                 this.state.visibility && React.createElement(
-                    "div",
+                    'div',
                     null,
                     React.createElement(
-                        "p",
+                        'p',
                         null,
-                        "Hey, these are some details you can now see!!"
+                        'Hey, these are some details you can now see!!'
                     )
                 )
             );
